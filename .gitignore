@@ -1,0 +1,14 @@
+# Internal CA Documentation
+docs/CA2.pdf
+docs/dev_plan_internal.txt
+docs/prd_internal.rst
+
+# Environment variables
+.env
+
+# Python cache
+__pycache__/
+*.pyc 
+instance/
+venv/
+.DS_Store

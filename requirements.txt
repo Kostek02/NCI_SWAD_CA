@@ -1,0 +1,7 @@
+# This is a requirements file
+
+# Flask Core Dependencies
+flask
+
+# Environment Variable Loader
+python-dotenv
