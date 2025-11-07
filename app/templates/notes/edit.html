@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<main>
+    <h2>Edit Note #{{ note_id }}</h2>
+    <form method="POST" action="#">
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title" value="Sample Note Title"><br><br>
+
+        <label for="content">Content:</label><br>
+        <textarea id="content" name="content">Existing note content goes here...</textarea><br><br>
+
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <p><a href="/notes">Back to Notes</a></p>
+</main>
+{% endblock %}

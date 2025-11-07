@@ -9,7 +9,7 @@ Purpose:
 - Prepares for secure data ownership and validation logic.
 """
 
-from flask import Blueprint
+from flask import Blueprint, render_template
 
 # Blueprint definition
 notes_bp = Blueprint("notes", __name__)
@@ -20,9 +20,9 @@ def notes_home():
     Notes dashboard route.
 
     Returns:
-        str: Plain text response confirming the Notes blueprint is active.
+        Renders the notes dashboard page.
     """
-    return "Notes Blueprint Active - Notes Dashboard Placeholder"
+    return render_template("notes/dashboard.html", title="Notes Dashboard - Secure Notes")
 
 
 @notes_bp.route("/create")
@@ -31,9 +31,9 @@ def create_note():
     Note creation route.
 
     Returns:
-        str: Plain text response confirming the Notes blueprint is active.
+        Renders the note creation page.
     """
-    return "Notes Blueprint Active - Create Note Placeholder"
+    return render_template("notes/create.html", title="Create Note - Secure Notes")
 
 
 @notes_bp.route("/view/<int:note_id>")
@@ -45,9 +45,9 @@ def view_note(note_id):
         note_id (int): ID of the note to view.
 
     Returns:
-        str: Plain text response including the note ID.
+        Renders the note viewing page.
     """
-    return f"Notes Blueprint Active - View Note {note_id} Placeholder"
+    return render_template("notes/view.html", title=f"View Note {note_id} - Secure Notes", note_id=note_id)
 
 
 @notes_bp.route("/edit/<int:note_id>")
@@ -59,20 +59,6 @@ def edit_note(note_id):
         note_id (int): ID of the note to edit.
 
     Returns:
-        str: Plain text response including the note ID.
+        Renders the note editing page.
     """
-    return f"Notes Blueprint Active - Edit Note {note_id} Placeholder"
-
-
-@notes_bp.route("/delete/<int:note_id>")
-def delete_note(note_id):
-    """
-    Note deletion route.
-
-    Args:
-        note_id (int): ID of the note to delete.
-
-    Returns:
-        str: Plain text response including the note ID.
-    """
-    return f"Notes Blueprint Active - Delete Note {note_id} Placeholder"
+    return render_template("notes/edit.html", title=f"Edit Note {note_id} - Secure Notes", note_id=note_id)
