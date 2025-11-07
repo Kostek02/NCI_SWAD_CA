@@ -2,6 +2,8 @@
 docs/CA2.pdf
 docs/dev_plan_internal.txt
 docs/prd_internal.rst
+docs/evidence/internal
+README.rst
 
 # Environment variables
 .env
@@ -12,5 +14,3 @@ __pycache__/
 instance/
 venv/
 .DS_Store
-
-README.rst
