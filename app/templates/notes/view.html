@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<main>
+    <h2>View Note #{{ note_id }}</h2>
+    <p>This is a placeholder for displaying a specific note’s details.</p>
+
+    <article>
+        <h3>Note Title (placeholder)</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+    </article>
+
+    <a href="/notes/edit/{{ note_id }}">Edit</a> | 
+    <a href="/notes">Back to Notes</a>
+</main>
+{% endblock %}

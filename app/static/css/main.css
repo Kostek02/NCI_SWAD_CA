@@ -1,0 +1,118 @@
+/* Improved Theme - v0.3.5 */
+
+body {
+    font-family: "Inter", "Segoe UI", sans-serif;
+    background-color: #0e141b;
+    color: #e4e6eb;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+  }
+  
+  /* Header and Navigation */
+  header {
+    background: linear-gradient(90deg, #1b232c 0%, #0e141b 100%);
+    padding: 1.2em 2em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  }
+  
+  header h1 {
+    font-size: 1.4em;
+    color: #ffffff;
+    margin: 0;
+  }
+  
+  nav a {
+    color: #e4e6eb;
+    margin: 0 10px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+  
+  nav a:hover {
+    color: #1e90ff;
+  }
+  
+  /* Main content */
+  main {
+    padding: 2em;
+    background-color: #1b232c;
+    margin: 2em auto;
+    width: 85%;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Headings */
+  h2, h3 {
+    color: #ffffff;
+    letter-spacing: 0.5px;
+  }
+  
+  h2 {
+    border-bottom: 2px solid #1e90ff;
+    padding-bottom: 0.3em;
+    margin-bottom: 1em;
+  }
+  
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1em;
+  }
+  
+  table th, table td {
+    border: 1px solid #2b3948;
+    padding: 0.6em;
+    text-align: left;
+  }
+  
+  table th {
+    background-color: #1e90ff;
+    color: #fff;
+  }
+  
+  table tr:nth-child(even) {
+    background-color: #162029;
+  }
+  
+  /* Buttons */
+  button {
+    background-color: #1e90ff;
+    color: #fff;
+    border: none;
+    padding: 0.6em 1.2em;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  button:hover {
+    background-color: #00ffa1;
+    color: #0e141b;
+  }
+  
+  /* Links */
+  a {
+    color: #1e90ff;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    color: #00ffa1;
+  }
+  
+  /* Footer */
+  footer {
+    background: #1b232c;
+    color: #aab1ba;
+    text-align: center;
+    padding: 1em;
+    font-size: 0.9em;
+    border-top: 1px solid #2b3948;
+  }  
