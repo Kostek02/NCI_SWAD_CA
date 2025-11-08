@@ -11,6 +11,8 @@ README.rst
 # Python cache
 __pycache__/
 *.pyc 
-instance/
 venv/
 .DS_Store
+
+# Database
+instance/secure_notes.db

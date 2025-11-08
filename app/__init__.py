@@ -17,6 +17,9 @@ from app.auth.routes import auth_bp
 from app.notes.routes import notes_bp
 from app.admin.routes import admin_bp
 
+# Import database helper
+from app.db import init_app as init_db
+
 def create_app():
     """
     Factory function for creating and configuring the Flask app.
@@ -41,7 +44,10 @@ def create_app():
     app.register_blueprint(notes_bp, url_prefix="/notes")
     app.register_blueprint(admin_bp, url_prefix="/admin")
 
-    # Step 4: Create a home route
+    # Step 4: Initialize the database
+    init_db(app)
+
+    # Step 5: Create a home route
     @app.route("/")
     @app.route("/home")
     def home():
@@ -53,5 +59,5 @@ def create_app():
         """
         return render_template("home.html", title="Home")
 
-    # Step 5: Return the configured Flask app
+    # Step 6: Return the configured Flask app
     return app
