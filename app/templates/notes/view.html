@@ -1,15 +1,31 @@
+{# View Note Template - v0.9.1: Functional baseline #}
+{# Read-only view of a single note with action buttons #}
+{# No ownership checks yet - v2.2.1 will add access control #}
 {% extends "base.html" %}
 {% block content %}
 <main>
-    <h2>View Note #{{ note_id }}</h2>
-    <p>This is a placeholder for displaying a specific note’s details.</p>
-
-    <article>
-        <h3>Note Title (placeholder)</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
-    </article>
-
-    <a href="/notes/edit/{{ note_id }}">Edit</a> | 
-    <a href="/notes">Back to Notes</a>
+    {# Note title #}
+    <h1>{{ note['title'] }}</h1>
+    
+    {# Creation timestamp #}
+    <div style="margin-bottom: 1rem; color: #666; font-size: 0.9em;">
+        Created: {{ note['created_at'] }}
+    </div>
+    
+    {# Note content (preserves whitespace and line breaks) #}
+    <div style="white-space: pre-wrap; line-height: 1.6; margin-bottom: 2rem;">
+        {{ note['content'] }}
+    </div>
+    
+    {# Action buttons: Edit, Delete, Back to Dashboard #}
+    <div>
+        <a href="{{ url_for('notes.edit_note', note_id=note['id']) }}" class="btn btn-primary">Edit</a> |
+        <a href="{{ url_for('notes.delete_note', note_id=note['id']) }}" 
+           class="btn btn-danger"
+           onclick="return confirm('Are you sure you want to delete this note?');">
+            Delete
+        </a> |
+        <a href="{{ url_for('notes.notes_home') }}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
 </main>
 {% endblock %}
