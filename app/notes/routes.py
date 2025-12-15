@@ -15,7 +15,7 @@ v0.9.1: Functional baseline - INTENTIONALLY INSECURE
 - Security hardening will be added in v2.x
 """
 
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from app.db import get_db
 
 # Blueprint definition
@@ -24,15 +24,18 @@ notes_bp = Blueprint("notes", __name__)
 
 @notes_bp.route("/")
 def notes_home():
-    """
-    Notes dashboard route - displays all notes.
-
+    '''
+    Notes dashboard route - displays notes.
+    
+    v0.9.3: Shows all notes (no filtering yet - IDOR vulnerable)
+    Will add user filtering in v2.2.1 with ownership checks.
+    
     Returns:
-        Renders the notes dashboard page with a list of all notes.
-    """
+        Renders the notes dashboard page with a list of notes.
+    '''
     db = get_db()
-    # Fetch all notes, ordered by most recent first
-    # No filtering - shows all notes (no ownership checks in v0.9.1)
+    # INSECURE: No filtering by user_id - shows all notes (IDOR vulnerability)
+    # No ownership checks - anyone can see/edit/delete any note
     notes = db.execute(
         "SELECT * FROM notes ORDER BY created_at DESC"
     ).fetchall()
@@ -64,12 +67,20 @@ def create_note():
                 title="Create Note - Secure Notes"
             )
 
+        # Get user_id from session (if logged in)
+        user_id = session.get('user_id')
+        
         # Insert note into database
         # INSECURE: String concatenation - vulnerable to SQL injection
-        # user_id is NULL for v0.9.1 (no authentication yet)
+        # Links note to user via user_id (but no ownership validation yet)
         db = get_db()
-        query = f"INSERT INTO notes (title, content, user_id) VALUES ('{title}', '{content}', NULL)"
-        db.execute(query)
+        if user_id:
+            insert_query = f"INSERT INTO notes (title, content, user_id) VALUES ('{title}', '{content}', {user_id})"
+        else:
+            # If not logged in, user_id is NULL (v0.9.1 behavior)
+            insert_query = f"INSERT INTO notes (title, content, user_id) VALUES ('{title}', '{content}', NULL)"
+        
+        db.execute(insert_query)
         db.commit()
 
         flash("Note created successfully!", "success")
