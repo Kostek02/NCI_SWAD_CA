@@ -21,6 +21,7 @@ from app.db import get_db
 import bcrypt
 from flask_login import login_user, logout_user, login_required, current_user
 from app.auth.models import User
+from app.auth.forms import RegistrationForm, LoginForm
 
 # Blueprint definition
 auth_bp = Blueprint("auth", __name__)
@@ -35,34 +36,17 @@ def register():
         GET: Renders the registration form.
         POST: Creates user in DB and redirects to login.
     """
-    if request.method == "POST":
-        username = request.form.get("username", "").strip()
-        password = request.form.get("password", "").strip()
-
-        # Basic validation (minimal - no proper sanitisation)
-        if not username or not password:
-            flash("Username and password are required.", "error")
-            return render_template(
-                "auth/register.html",
-                title="Register - Secure Notes"
-            )
-
+    form = RegistrationForm()
+    
+    if form.validate_on_submit():
+        username = form.username.data.strip()
+        password = form.password.data
+        
         db = get_db()
-
-        # Check if username already exists
-        # INSECURE: String concatenation - vulnerable to SQL injection
-        check_query = f"SELECT * FROM users WHERE username = '{username}'"
-        existing_user = db.execute(check_query).fetchone()
-
-        if existing_user:
-            flash("Username already exists. Please choose another.", "error")
-            return render_template(
-                "auth/register.html",
-                title="Register - Secure Notes"
-            )
-
+        
         # Insert new user into database
         # SECURE: Hash password with bcrypt before storing
+        # Note: SQL injection still present (will be fixed with parameterized queries)
         password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         insert_query = f"INSERT INTO users (username, password) VALUES ('{username}', '{password_hash.decode('utf-8')}')"
         db.execute(insert_query)
@@ -70,11 +54,12 @@ def register():
 
         flash("Registration successful! Please login.", "success")
         return redirect(url_for("auth.login"))
-
-    # GET request - show registration form
+    
+    # GET request or validation failed - show form
     return render_template(
         "auth/register.html",
-        title="Register - Secure Notes"
+        title="Register - Secure Notes",
+        form=form
     )
 
 
@@ -87,23 +72,17 @@ def login():
         GET: Renders the login form.
         POST: Authenticates user and creates session, redirects to notes dashboard.
     """
-    if request.method == "POST":
-        username = request.form.get("username", "").strip()
-        password = request.form.get("password", "").strip()
-
-        # Basic validation
-        if not username or not password:
-            flash("Username and password are required.", "error")
-            return render_template(
-                "auth/login.html",
-                title="Login - Secure Notes"
-            )
+    form = LoginForm()
+    
+    if form.validate_on_submit():
+        username = form.username.data.strip()
+        password = form.password.data
 
         db = get_db()
 
         # Authenticate user
         # SECURE: Get user by username only, then verify password hash
-        # Note: SQL injection still present (will be fixed in v2.1.1)
+        # Note: SQL injection still present (will be fixed with parameterized queries)
         query = f"SELECT * FROM users WHERE username = '{username}'"
         user = db.execute(query).fetchone()
 
@@ -120,20 +99,22 @@ def login():
             flash("Invalid username or password.", "error")
             return render_template(
                 "auth/login.html",
-                title="Login - Secure Notes"
+                title="Login - Secure Notes",
+                form=form
             )
 
         # SECURE: Use Flask-Login for session management
         user_obj = User(user['id'], user['username'])
-        login_user(user_obj, remember=False)  # remember=True for persistent sessions
+        login_user(user_obj, remember=False)
 
         flash(f"Welcome back, {user['username']}!", "success")
         return redirect(url_for("notes.notes_home"))
-
+    
     # GET request - show login form
     return render_template(
         "auth/login.html",
-        title="Login - Secure Notes"
+        title="Login - Secure Notes",
+        form=form
     )
 
 

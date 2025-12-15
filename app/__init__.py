@@ -11,6 +11,7 @@ Purpose:
 """
 
 from flask import Flask, render_template
+from flask_wtf.csrf import CSRFProtect
 
 # Import Blueprints
 from app.auth.routes import auth_bp
@@ -44,10 +45,15 @@ def create_app():
     # Step 1: Create Flask instance
     app = Flask(__name__)
 
-    # Step 2: Load configuratoin from config.py (Config class)
+    # Step 1.5: Load configuration from config.py (Config class)
     app.config.from_object("config.Config")
 
-    # Step 2.5: Initialize Flask-Login
+    # Step 2: Initialise CSRF Protection (v2.1.1)
+    # Note: Must be after config is loaded (needs SECRET_KEY)
+    csrf = CSRFProtect()
+    csrf.init_app(app)
+
+    # Step 2.5: Initialise Flask-Login
     login_manager = LoginManager()
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'  # Redirect to login if not authenticated
