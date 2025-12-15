@@ -59,26 +59,72 @@ This approach ensures clear traceability and meets CA2’s requirement for **vis
 | **Phase 0 – Initialisation** | `v0.0-prd` | Repository structure, environment setup, config files, and internal documentation. | `.env`, `requirements.txt`, `config.py`, `prd.md`, `dev_plan.md` |
 | **Phase 1 – Flask Scaffold** | `v0.1-setup` | Implement Flask app factory, base route, and run scripts (`run_app.sh` / `run_app.ps1`). | `app/__init__.py`, `run.py`, run scripts, verified local app execution |
 | **Phase 2 – Blueprint Structure** | `v0.2-blueprints` | Add `auth`, `notes`, and `admin` blueprints with placeholder routes for modular architecture. | `app/auth/routes.py`, `app/notes/routes.py`, `app/admin/routes.py`, registered blueprints |
-| **Phase 2.1 – Frontend Scaffolding** | `v0.3-home` | Introduce Jinja templates, static assets, and initial UI placeholders. | `templates/base.html`, `templates/home.html`, `static/css/main.css`, screenshot of rendered home |
-|  | `v0.3.1-Home` | Base and homepage rendering | Implement `/home` route, integrate `render_template`, establish global navigation, and confirm CSS styling. |
-|  | `v0.3.2-Auth Templates` | Login + Register pages | Render real HTML templates for `/auth/login` and `/auth/register`. |
-|  | `v0.3.3-Notes Templates` | CRUD placeholders | Render pages for `/notes`, `/notes/create`, `/notes/view`, `/notes/edit`. |
-|  | `v0.3.4-Admin Template` | Admin dashboard placeholder | Implement basic admin overview layout. |
-|  | `v0.3.5-UI Polish` | UI refinement | Light global CSS and template cleanup before database setup. |
-| **Phase 2.2 – Database Scaffolding** | `v0.4-db` | Introduce SQLite schema and helper (intentionally insecure baseline). | `instance/schema.sql`, `app/db.py`, DB creation screenshot |
-| **Phase 2.3 – App Helpers & Middleware** | `v0.5-middleware` | Add flash messages, context processors, error handlers (403/404/500), and basic middleware hooks. | `app/helpers.py`, `app/error_handlers.py`, `templates/403.html`, `templates/404.html`, evidence screenshot |
-| **Phase 3 – Insecure MVP (Intentional Vulnerabilities)** | `v1.0–v1.3` | Build intentionally insecure baseline for later hardening and OWASP mapping. | Working insecure app used for testing and evidence |
-| • `v1.0-insecure-auth` | — | Implement `/register`, `/login`, `/logout` using raw SQL + plaintext passwords. | Auth routes with raw SQL, SQLi proof screenshot |
-| • `v1.1-insecure-crud` | — | Implement `/notes` CRUD without ownership checks (IDOR) or sanitisation. | Stored XSS + IDOR PoC evidence |
-| • `v1.2-insecure-admin` | — | Make admin dashboard globally accessible (no RBAC). | Evidence of unauthorized admin access |
-| • `v1.3-full-insecure` | — | Merge all insecure features into one working MVP. | Consolidated exploitation screenshots (SQLi, XSS, IDOR) |
-| **Phase 4 – Testing & Analysis** | `v1.4–v1.5` | Perform Bandit, Semgrep, and pytest to build vulnerability baseline. | Static/dynamic test reports and vulnerability table |
-| **Phase 5 – Security Refactor** | `v2.0–v2.3` | Incrementally harden the insecure app, mapping fixes to SR1–SR9 and OWASP Top 10 (2025). | Secure implementations with before/after evidence |
-| • `v2.0-auth-hardening` | — | Implement bcrypt hashing, Flask-Login sessions, and secure cookies. | Verified hashed passwords and session security |
-| • `v2.1-validation-csrf` | — | Integrate Flask-WTF forms, CSRF protection, and sanitisation. | CSRF tokens and sanitisation proof |
-| • `v2.2-rbac-protection` | — | Add RBAC and record ownership validation. | RBAC decorators, 403 checks |
-| • `v2.3-secure-headers` | — | Enforce CSP/HSTS via Flask-Talisman, rate limiting via Flask-Limiter. | Header evidence + rate-limit log |
-| **Phase 6 – Verification & Documentation (Final Release)** | `v2.4–v2.6` | Conduct final verification, SAST re-run, documentation, and video presentation. | Final README, Bandit/Semgrep comparison, final report, demo video |
+| **Phase 2.1 – Frontend Scaffolding** | `v0.3-home` → `v0.3.5` | Establish base templates, static assets, and initial UI placeholders. | `templates/base.html`, `templates/home.html`, `static/css/main.css`, homepage screenshot |
+|  • `v0.3.1-Home` | — | Base and homepage rendering with global navigation. | `/home` route rendered, CSS verified |
+|  • `v0.3.2-Auth Templates` | — | Add login + register pages via Jinja templates. | `/auth/login`, `/auth/register` |
+|  • `v0.3.3-Notes Templates` | — | Add CRUD placeholders for note management. | `/notes`, `/notes/create`, `/notes/edit`, `/notes/view` |
+|  • `v0.3.4-Admin Template` | — | Basic admin dashboard placeholder. | `/admin` rendered |
+|  • `v0.3.5-UI Polish` | — | Refine CSS / layout before DB integration. | Updated `main.css`, screenshot |
+| **Phase 2.2 – Database Scaffolding** | `v0.4-db` | Introduce SQLite schema + helper (intentionally insecure baseline). | `instance/schema.sql`, `app/db.py`, DB creation screenshot |
+| **Phase 2.3 – App Helpers & Middleware** | `v0.5-middleware` | Add flash messages, context processors, error handlers (403/404/500), and middleware hooks. | `app/helpers.py`, `app/error_handlers.py`, `templates/403.html`, `templates/404.html`, evidence screenshot |
+
+### Phase 2.4 – Functional Baseline (`v0.9.x`)
+Establish a complete **working application** with intentional vulnerabilities.
+
+| Sub-Phase | Version Tag | Description | Key Deliverables |
+|------------|--------------|-------------|------------------|
+| **Functional /Notes/** | `v0.9.1-notes-crud` | Implement full CRUD operations backed by SQLite. | Create/Edit/View/Delete notes, DB persistence proof |
+| **Functional /Auth/** | `v0.9.2-auth-basic` | Add working `/register` and `/login` routes using raw SQL + plaintext storage. | Successful registration + login, DB user records |
+| **Functional /Admin/** | `v0.9.3-admin-linkage` | Connect user–note relationships and basic admin overview (list users/notes). | `/admin` shows all records, privilege structure ready |
+| **Functional Integration Tests** | `v0.9.4-stable-baseline` | Verify all routes + templates work end-to-end. Document all intentional vulnerabilities. | Full CRUD + Auth + Admin flow demo, evidence screenshots |
+
+---
+
+### Phase 3 – Insecure MVP (Intentional Vulnerabilities)
+**Note:** All vulnerabilities were present in the functional baseline (v0.9.x) and verified during v0.9.4 testing. The insecure MVP consolidates these demonstrated vulnerabilities.
+
+| Sub-Phase | Version Tag | Description | Key Deliverables |
+|------------|--------------|-------------|------------------|
+| **Insecure /Auth/** | `v1.0-insecure-auth` | Raw SQL auth with plaintext passwords → SQLi exploitation. | SQLi bypass screenshot, DB leak evidence |
+| **Insecure /Notes/** | `v1.1-insecure-crud` | Missing ownership checks (IDOR) + unsanitised inputs (XSS). | Stored XSS + IDOR PoC evidence |
+| **Insecure /Admin/** | `v1.2-insecure-admin` | No RBAC → unauthenticated access to admin routes. | Proof of unauthorised access |
+| **Merged Insecure MVP** | `v1.3-full-insecure` | Consolidate all vulnerabilities into one testable application. All vulnerabilities demonstrated and documented in v0.9.4 testing. | Combined SQLi/XSS/IDOR exploitation screenshots, full vulnerability documentation |
+
+---
+
+### Phase 4 – Testing & Analysis
+Conduct security scans and tests to create a baseline for later comparison.
+
+| Sub-Phase | Version Tag | Description | Key Deliverables |
+|------------|--------------|-------------|------------------|
+| **Static Analysis – Bandit** | `v1.4-bandit` | Run Bandit on insecure code base. | Bandit report (`.txt / .html`) |
+| **Static Analysis – Semgrep** | `v1.5-semgrep` | Apply OWASP rule sets to find flaws. | Semgrep report + vulnerability table |
+| **Functional Testing – pytest** | `v1.5.1-tests` | Validate route responses and error codes. | pytest results log |
+
+---
+
+### Phase 5 – Security Refactor (`v2.0–v2.3`)
+Incrementally secure the application and map mitigations to SR1–SR9 and OWASP 2025.
+
+| Sub-Phase | Version Tag | Description | Key Deliverables |
+|------------|--------------|-------------|------------------|
+| **Auth Hardening** | `v2.0.1-bcrypt` | Introduce bcrypt hashing + secure password storage. | Verified hashes in DB |
+|  • `v2.0.2-flask-login` | — | Add Flask-Login sessions + secure cookies. | Session validation evidence |
+| **Validation & CSRF Protection** | `v2.1.1-csrf-forms` | Use Flask-WTF with CSRF tokens and input sanitisation. | Token presence + form validation screenshots |
+| **RBAC & Ownership Protection** | `v2.2.1-role-checks` | Add RBAC decorators and record ownership validation. | 403 access tests per role |
+| **Secure Headers & Rate Limiting** | `v2.3.1-talisman` | Apply Flask-Talisman (CSP/HSTS) and Flask-Limiter. | Response headers + rate-limit logs |
+| **Audit Logging & Monitoring** | `v2.3.2-audit-logs` | Record auth/CRUD actions for visibility. | Log evidence files (`/logs/`) |
+
+---
+
+### Phase 6 – Verification & Documentation (Final Release)
+Final validation, reporting, and demo submission.
+
+| Sub-Phase | Version Tag | Description | Key Deliverables |
+|------------|--------------|-------------|------------------|
+| **Final SAST Re-run** | `v2.4-verification` | Re-run Bandit & Semgrep on hardened code. | Comparison report (`before vs after`) |
+| **Documentation Update** | `v2.5-docs` | Update README, evidence tables, and final CA2 report. | Completed project docs |
+| **Demonstration Video** | `v2.6-demo` | Record and upload demo walkthrough. | Link to video + screenshots |
 
 ---
 

@@ -147,6 +147,9 @@ CA2/
 | **v0.0**      | Repository initialization and internal docs |
 | **v0.1**      | Flask setup and environment scripts         |
 | **v0.2**      | Blueprints and route structure              |
+| **v0.3.1–v0.3.5** | Frontend scaffolding (UI templates) |
+| **v0.4–v0.5** | Database and middleware setup |
+| **v0.9.1–v0.9.4** | Functional baseline (Auth / Notes / Admin) |
 | **v1.0–v1.3** | Insecure MVP                                |
 | **v1.4–v1.5** | Static + dynamic testing                    |
 | **v2.0–v2.6** | Secure and final release                    |
@@ -166,13 +169,13 @@ Final verification ensures all SR1–SR9 are fully implemented.
 ## 10. Evidence & Reporting
 ## ===============================================
 
-# Evidence is stored under docs/evidence/:
+### Evidence is stored under `docs/evidence/`
 - Flask run confirmation
 - Bandit & Semgrep results
 - Pytest logs
 - Screenshots of vulnerabilities before/after fixes
 
-# The technical report includes:
+### The technical report includes:
 - GitHub repo link
 - Video presentation link (Unlisted YouTube)
 - Final documentation and appendices
@@ -189,5 +192,5 @@ Final verification ensures all SR1–SR9 are fully implemented.
 ## 12. Author 
 ## =============================================== 
 **Konstanty Litwinow** MSc Cybersecurity, National College of Ireland 
-**GitHub:** https://github.com/Kostek02 
-**Email:** x234073473@student.ncirl.ie
+**GitHub:** https://github.com/Kostek02 (https://github.com/Kostek02)
+**Email:** x23437073@student.ncirl.ie

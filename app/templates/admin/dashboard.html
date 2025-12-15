@@ -2,27 +2,92 @@
 {% block content %}
 <main>
     <h2>Admin Dashboard</h2>
-    <p>This is a placeholder for the Admin interface.</p>
+    <p style="color: #d32f2f; font-weight: bold;">
+        ⚠️ v0.9.3: No access control - anyone can view this (vulnerability)
+    </p>
 
-    <section>
-        <h3>Users (Preview)</h3>
-        <table border="1" cellpadding="5">
-            <tr><th>ID</th><th>Username</th><th>Role</th></tr>
-            <tr><td>1</td><td>admin</td><td>Admin</td></tr>
-            <tr><td>2</td><td>user1</td><td>User</td></tr>
-            <tr><td>3</td><td>moderator</td><td>Moderator</td></tr>
-        </table>
-    </section>
-
+    {# Users Section #}
     <section style="margin-top: 2rem;">
-        <h3>Notes (Preview)</h3>
-        <table border="1" cellpadding="5">
-            <tr><th>ID</th><th>Title</th><th>Owner</th></tr>
-            <tr><td>1</td><td>Welcome Note</td><td>admin</td></tr>
-            <tr><td>2</td><td>Sample Note</td><td>user1</td></tr>
-        </table>
+        <h3>All Users</h3>
+        {% if users %}
+            <table border="1" cellpadding="8" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background-color: #f5f5f5;">
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Password (Plaintext)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user['id'] }}</td>
+                            <td>{{ user['username'] }}</td>
+                            <td style="color: #d32f2f; font-family: monospace;">
+                                {{ user['password'] }}
+                                <span style="color: #666; font-size: 0.85em;">(⚠️ plaintext)</span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No users found.</p>
+        {% endif %}
     </section>
 
-    <p style="margin-top: 2rem;">(Future: restricted by RBAC in v2.2)</p>
+    {# Notes Section #}
+    <section style="margin-top: 2rem;">
+        <h3>All Notes</h3>
+        {% if notes %}
+            <table border="1" cellpadding="8" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background-color: #f5f5f5;">
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Content Preview</th>
+                        <th>Owner</th>
+                        <th>Created At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for note in notes %}
+                        <tr>
+                            <td>{{ note['id'] }}</td>
+                            <td>
+                                <a href="{{ url_for('notes.view_note', note_id=note['id']) }}">
+                                    {{ note['title'] }}
+                                </a>
+                            </td>
+                            <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis;">
+                                {{ note['content'][:50] }}{% if note['content']|length > 50 %}...{% endif %}
+                            </td>
+                            <td>
+                                {% if note['username'] %}
+                                    {{ note['username'] }} (ID: {{ note['user_id'] }})
+                                {% else %}
+                                    <span style="color: #999;">No owner (NULL)</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ note['created_at'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No notes found.</p>
+        {% endif %}
+    </section>
+
+    {# Summary Statistics #}
+    <section style="margin-top: 2rem; padding: 1rem; border-radius: 4px;">
+        <h3>Summary</h3>
+        <p><strong>Total Users:</strong> {{ users|length }}</p>
+        <p><strong>Total Notes:</strong> {{ notes|length }}</p>
+        <p style="color: #666; font-size: 0.9em; margin-top: 1rem;">
+            Note: This admin interface has no access control. 
+            Anyone can view all users and notes (vulnerability - will be fixed in v2.2.1 with RBAC).
+        </p>
+    </section>
 </main>
 {% endblock %}

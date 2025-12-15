@@ -1,17 +1,32 @@
+{# Edit Note Template - v0.9.1: Functional baseline #}
+{# Form to edit existing note (pre-filled with current values) #}
+{# No ownership validation yet - v2.2.1 will add RBAC checks #}
 {% extends "base.html" %}
 {% block content %}
 <main>
-    <h2>Edit Note #{{ note_id }}</h2>
-    <form method="POST" action="#">
-        <label for="title">Title:</label><br>
-        <input type="text" id="title" name="title" value="Sample Note Title"><br><br>
-
-        <label for="content">Content:</label><br>
-        <textarea id="content" name="content">Existing note content goes here...</textarea><br><br>
-
-        <button type="submit">Save Changes</button>
+    <h1>Edit Note</h1>
+    
+    {# Note edit form - POSTs to edit_note route with note_id #}
+    <form method="POST" action="{{ url_for('notes.edit_note', note_id=note['id']) }}">
+        {# Title input (pre-filled with existing title) #}
+        <div style="margin-bottom: 1rem;">
+            <label for="title">Title:</label><br>
+            <input type="text" id="title" name="title" value="{{ note['title'] }}" required
+                   style="width: 100%; padding: 0.5rem; margin-top: 0.25rem;">
+        </div>
+        
+        {# Content textarea (pre-filled with existing content) #}
+        <div style="margin-bottom: 1rem;">
+            <label for="content">Content:</label><br>
+            <textarea id="content" name="content" rows="10" required
+                      style="width: 100%; padding: 0.5rem; margin-top: 0.25rem;">{{ note['content'] }}</textarea>
+        </div>
+        
+        {# Form action buttons #}
+        <div>
+            <button type="submit" class="btn btn-primary">Update Note</button>
+            <a href="{{ url_for('notes.view_note', note_id=note['id']) }}" class="btn btn-secondary">Cancel</a>
+        </div>
     </form>
-
-    <p><a href="/notes">Back to Notes</a></p>
 </main>
 {% endblock %}
