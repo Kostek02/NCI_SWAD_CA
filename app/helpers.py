@@ -10,7 +10,6 @@ Purpose:
 """
 
 from flask import flash
-from flask_login import current_user
 
 APP_NAME = "Secure Notes Web Application"
 APP_VERSION = "v0.5"
@@ -30,24 +29,14 @@ def init_app(app):
         Inject global variables into all template contexts.
         Ensures current_user is always available (Flask-Login provides anonymous user if not logged in).
         """
-        try:
-            # current_user is provided by Flask-Login automatically
-            # This ensures it's always in the context, even in error handlers
-            return {
-                "app_name": APP_NAME,
-                "app_version": APP_VERSION,
-                "current_user": current_user
-            }
-        except Exception:
-            # Fallback if current_user is not available (shouldn't happen with Flask-Login)
-            from flask_login import AnonymousUserMixin
-            class AnonymousUser(AnonymousUserMixin):
-                pass
-            return {
-                "app_name": APP_NAME,
-                "app_version": APP_VERSION,
-                "current_user": AnonymousUser()
-            }
+        from flask_login import current_user
+        # current_user is provided by Flask-Login automatically
+        # It will be an AnonymousUser if not logged in, which is safe to use
+        return {
+            "app_name": APP_NAME,
+            "app_version": APP_VERSION,
+            "current_user": current_user
+        }
 
     # Convenience wrappers for consistent flash messages
     def flash_success(message):
