@@ -4,8 +4,8 @@
 **Student ID:** 23437073  
 **Programme:** MSc Cybersecurity  
 **Module:** Secure Web Development (H9SWD)  
-**Assessment:** CA2 - Secure Web Application
-**Assessment Grade** H1 (Distinction)
+**Assessment:** CA2 - Secure Web Application  
+**Assessment Grade:** H1 (Distinction)  
 **Framework:** Flask (Python 3.9+)  
 **Repository:** [https://github.com/Kostek02/CA2](https://github.com/Kostek02/CA2)
 
